@@ -502,7 +502,13 @@ class AudiobookApp(tk.Tk):
         self._populate_grid()
 
     def _toggle_pause(self):
-        if self._current_book:
+        if not self._current_book:
+            return
+        if not self._player.status.get("playing"):
+            prog = self._store.get(self._current_book["id"])
+            self._player.play(self._current_book["id"], self._current_book["files"],
+                              prog["file_idx"], prog["position"])
+        else:
             self._player.pause()
 
     def _prev_file(self):
