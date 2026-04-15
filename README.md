@@ -36,7 +36,9 @@ Unterstützte Formate: `.mp3 .m4a .m4b .flac .ogg .aac .wav .opus`
 
 ```bash
 sudo apt update
-sudo apt install -y mpv python3-pip python3-venv python3-tk
+sudo apt install -y mpv python3-pip python3-venv python3-tk python3-dbus python3-gi gir1.2-glib-2.0 bluez
+# mpris-proxy einmalig starten (oder als systemd-Service)
+mpris-proxy &
 ```
 
 ### 2. Python-Umgebung
