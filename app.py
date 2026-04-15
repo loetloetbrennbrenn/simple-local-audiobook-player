@@ -13,8 +13,8 @@ from pathlib import Path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "backend"))
 from library import scan_library, extract_cover_bytes
 from player import AudiobookPlayer
-
 from progress import ProgressStore
+import mpris as mpris_mod
 
 import tkinter as tk
 from tkinter import ttk, filedialog
@@ -266,6 +266,12 @@ class AudiobookApp(tk.Tk):
         self._cfg = load_config()
         self._store = ProgressStore()
         self._player = AudiobookPlayer(on_progress=self._on_progress_cb)
+        self._mpris = mpris_mod.create_service(
+            on_play_pause=self._toggle_pause,
+            on_next=self._next_file,
+            on_previous=self._prev_file,
+            on_stop=self._player.stop,
+        )
         self._library: list = []
         self._progress: dict = {}
         self._current_book: dict | None = None
@@ -548,9 +554,11 @@ class AudiobookApp(tk.Tk):
             if playing else ""
         )
         self._play_btn.config(text="⏸" if playing and not self._status_paused else "▶")
+        self._mpris.update_status(playing, self._status_paused, self._status_pos)
 
     def _update_player_bar_book(self, book: dict):
         self._pb_title.config(text=book["title"])
+        self._mpris.update_metadata(book["title"], book.get("author", ""))
         threading.Thread(target=self._load_pb_cover, args=(book,), daemon=True).start()
 
     def _load_pb_cover(self, book: dict):
