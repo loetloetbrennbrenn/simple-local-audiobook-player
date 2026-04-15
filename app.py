@@ -290,6 +290,8 @@ class AudiobookApp(tk.Tk):
         self.bind("<space>", lambda _: self._toggle_pause())
         self.bind("<Left>", lambda _: self._player.skip_backward(15))
         self.bind("<Right>", lambda _: self._player.skip_forward(30))
+        self.bind("<Up>", lambda _: self._canvas.yview_scroll(-3, "units"))
+        self.bind("<Down>", lambda _: self._canvas.yview_scroll(3, "units"))
         self.bind("<Configure>", self._on_resize)
 
     # ── UI build ───────────────────────────────────────────────────────────────
