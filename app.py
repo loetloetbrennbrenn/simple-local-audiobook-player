@@ -417,7 +417,7 @@ class AudiobookApp(tk.Tk):
             grid_w = self.winfo_width() - 24
         if grid_w < 100:
             grid_w = 900
-        cols = max(1, grid_w // (CARD_W + PAD * 2))
+        cols = min(5, max(1, grid_w // (CARD_W + PAD * 2)))
 
         if not self._library:
             for w in self._grid_frame.winfo_children():
